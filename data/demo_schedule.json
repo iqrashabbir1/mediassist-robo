@@ -1,0 +1,15 @@
+{
+  "user_id": "demo_user",
+  "medications": [
+    {
+      "label": "Medication A",
+      "time": "09:00",
+      "instruction": "after breakfast"
+    },
+    {
+      "label": "Medication B",
+      "time": "21:00",
+      "instruction": "before sleep"
+    }
+  ]
+}
