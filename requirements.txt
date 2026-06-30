@@ -8,6 +8,4 @@ Pillow
 google-genai
 gTTS
 opencv-python-headless
-torch
-torchvision
 ultralytics

@@ -2,10 +2,17 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
+
 load_dotenv()
 
 
-def generate_social_reply(user_message: str, reminder_context: dict):
+def generate_social_reply(user_message: str, reminder_context: dict) -> str:
+    """
+    Generate a short social robot reply using Gemini.
+
+    If Gemini is unavailable or quota is exhausted, the main API endpoint
+    catches the exception and uses the rule-based fallback reply.
+    """
     api_key = os.getenv("GEMINI_API_KEY")
 
     if not api_key:
@@ -34,7 +41,7 @@ Generate one short robot reply.
 
     response = client.models.generate_content(
         model="gemini-2.0-flash",
-        contents=prompt
+        contents=prompt,
     )
 
     return response.text

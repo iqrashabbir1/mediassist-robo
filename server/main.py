@@ -10,8 +10,11 @@ from server.speech import text_to_speech
 
 app = FastAPI(
     title="mediassist-robo",
-    description="Cloud-local social robot service for medication reminders and companion check-ins.",
-    version="1.0"
+    description=(
+        "Cloud-local social robot service for medication reminders "
+        "and companion check-ins."
+    ),
+    version="1.0",
 )
 
 
@@ -27,7 +30,7 @@ class ReminderRequest(BaseModel):
                 "user_id": "demo_user",
                 "message": "Do I need to take anything now?",
                 "current_time": "09:00",
-                "confirmation": None
+                "confirmation": None,
             }
         }
     }
@@ -37,16 +40,24 @@ class ReminderRequest(BaseModel):
 def root():
     return {
         "message": "Welcome to mediassist-robo",
-        "description": "Cloud-local social robot service for medication reminders and companion check-ins.",
+        "description": (
+            "Cloud-local social robot service for medication reminders "
+            "and companion check-ins."
+        ),
         "available_browser_endpoints": {
             "health": "http://127.0.0.1:8000/health",
             "docs": "http://127.0.0.1:8000/docs",
             "medication_due_demo": "http://127.0.0.1:8000/reminder/demo",
             "medication_no_due_demo": "http://127.0.0.1:8000/reminder/demo/no-due",
-            "medication_confirmed_demo": "http://127.0.0.1:8000/reminder/demo/confirmed",
-            "scene_demo": "http://127.0.0.1:8000/scene/demo"
+            "medication_confirmed_demo": (
+                "http://127.0.0.1:8000/reminder/demo/confirmed"
+            ),
+            "scene_demo": "http://127.0.0.1:8000/scene/demo",
         },
-        "note": "POST endpoints such as /reminder/assist and /scene/analyze should be tested through /docs or curl."
+        "note": (
+            "POST endpoints such as /reminder/assist and /scene/analyze "
+            "should be tested through /docs or curl."
+        ),
     }
 
 
@@ -60,7 +71,7 @@ def health():
         "version": "1.0",
         "local_component": "YOLO",
         "remote_ai": "Gemini",
-        "latency_ms": round((time.time() - start) * 1000, 2)
+        "latency_ms": round((time.time() - start) * 1000, 2),
     }
 
 
@@ -68,16 +79,12 @@ def health():
 def reminder_demo():
     """
     Browser-friendly demo endpoint for medication due case.
-
-    Open directly in browser:
-    http://127.0.0.1:8000/reminder/demo
     """
-
     reminder_context = build_robot_reply(
         user_id="demo_user",
         message="Do I need to take anything now?",
         current_time="09:00",
-        confirmation=None
+        confirmation=None,
     )
 
     reminder_context["demo_note"] = (
@@ -92,16 +99,12 @@ def reminder_demo():
 def reminder_demo_no_due():
     """
     Browser-friendly demo endpoint for no medication due case.
-
-    Open directly in browser:
-    http://127.0.0.1:8000/reminder/demo/no-due
     """
-
     reminder_context = build_robot_reply(
         user_id="demo_user",
         message="Do I need to take anything now?",
         current_time="14:00",
-        confirmation=None
+        confirmation=None,
     )
 
     reminder_context["demo_note"] = (
@@ -115,16 +118,12 @@ def reminder_demo_no_due():
 def reminder_demo_confirmed():
     """
     Browser-friendly demo endpoint for user confirmation case.
-
-    Open directly in browser:
-    http://127.0.0.1:8000/reminder/demo/confirmed
     """
-
     reminder_context = build_robot_reply(
         user_id="demo_user",
         message="I have taken it.",
         current_time="09:00",
-        confirmation="taken"
+        confirmation="taken",
     )
 
     reminder_context["demo_note"] = (
@@ -141,27 +140,18 @@ def reminder_assist(request: ReminderRequest):
 
     Test through:
     http://127.0.0.1:8000/docs
-
-    Example input:
-    {
-      "user_id": "demo_user",
-      "message": "Do I need to take anything now?",
-      "current_time": "09:00",
-      "confirmation": null
-    }
     """
-
     reminder_context = build_robot_reply(
         user_id=request.user_id,
         message=request.message,
         current_time=request.current_time,
-        confirmation=request.confirmation
+        confirmation=request.confirmation,
     )
 
     try:
         ai_reply = generate_social_reply(
             user_message=request.message,
-            reminder_context=reminder_context
+            reminder_context=reminder_context,
         )
 
         reminder_context["ai_robot_reply"] = ai_reply
@@ -181,15 +171,8 @@ async def scene_analyze(file: UploadFile = File(...)):
     """
     Main local vision endpoint using YOLO.
 
-    This is a POST endpoint.
-    Test through:
-    http://127.0.0.1:8000/docs
-
-    Or with curl:
-    curl -X POST http://127.0.0.1:8000/scene/analyze \
-    -F "file=@samples/demo_scene.jpg"
+    This is a POST endpoint. Test through /docs or with curl.
     """
-
     image_bytes = await file.read()
     result = analyze_scene_local(image_bytes)
 
@@ -212,18 +195,13 @@ def scene_demo():
     """
     Browser-friendly GET endpoint for local YOLO scene analysis.
 
-    It uses:
-    samples/demo_scene.jpg
-
-    Open directly in browser:
-    http://127.0.0.1:8000/scene/demo
+    It uses samples/demo_scene.jpg.
     """
-
     image_path = "samples/demo_scene.jpg"
 
     try:
-        with open(image_path, "rb") as f:
-            image_bytes = f.read()
+        with open(image_path, "rb") as file:
+            image_bytes = file.read()
 
         result = analyze_scene_local(image_bytes)
 
@@ -249,9 +227,8 @@ def scene_demo():
         return {
             "error": "samples/demo_scene.jpg not found.",
             "fix": (
-                "Copy an image to samples/demo_scene.jpg, then reload this endpoint. "
-                "Example: cp /mnt/c/Users/masim/Downloads/demo_scene.jpg samples/demo_scene.jpg"
-            )
+                "Copy an image to samples/demo_scene.jpg, then reload this endpoint."
+            ),
         }
 
 
@@ -262,18 +239,25 @@ def speak(request: ReminderRequest):
 
     It creates an MP3 file from the robot reminder reply.
     """
-
     reminder_context = build_robot_reply(
         user_id=request.user_id,
         message=request.message,
         current_time=request.current_time,
-        confirmation=request.confirmation
+        confirmation=request.confirmation,
     )
 
-    audio_path = text_to_speech(reminder_context["robot_reply"])
+    try:
+        audio_path = text_to_speech(reminder_context["robot_reply"])
 
-    return {
-        "robot_reply": reminder_context["robot_reply"],
-        "audio_path": audio_path,
-        "note": "The MP3 file is saved locally in the outputs folder."
-    }
+        return {
+            "robot_reply": reminder_context["robot_reply"],
+            "audio_path": audio_path,
+            "tts_status": "MP3 file generated successfully.",
+        }
+
+    except Exception as error:
+        return {
+            "robot_reply": reminder_context["robot_reply"],
+            "audio_path": None,
+            "tts_status": f"Text-to-speech failed: {error}",
+        }
