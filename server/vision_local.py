@@ -1,3 +1,4 @@
+# Final formatted source file
 from PIL import Image
 import io
 
