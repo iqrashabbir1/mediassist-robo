@@ -387,34 +387,39 @@ Only fake medication labels are used for safety.
 
 ## 13. Screenshots
 
-Add screenshots in the `screenshots/` folder.
+The following screenshots show the working FastAPI service, browser demo endpoints, local YOLO vision response, Swagger documentation, and terminal tests.
 
-Recommended screenshots:
+### Project Home Endpoint
 
-```text
-screenshots/01_home.png
-screenshots/02_health.png
-screenshots/03_reminder_demo.png
-screenshots/04_scene_demo.png
-screenshots/05_docs.png
-screenshots/06_terminal_tests.png
-```
-
-Suggested README display:
-
-```markdown
 ![Home endpoint](screenshots/01_home.png)
+
+### Health Endpoint
 
 ![Health endpoint](screenshots/02_health.png)
 
-![Reminder demo](screenshots/03_reminder_demo.png)
+### Medication Reminder Demo
+
+![Medication reminder demo](screenshots/03_reminder_demo.png)
+
+### Local YOLO Scene Demo
 
 ![Scene demo](screenshots/04_scene_demo.png)
 
-![Swagger documentation](screenshots/05_docs.png)
-```
+### FastAPI Swagger Documentation
 
----
+![Swagger documentation](screenshots/05_docs.png)
+
+### Text-to-Speech Terminal Test
+
+![Terminal speak test](screenshots/06_terminal_speak.png)
+
+### Local YOLO Image Analysis Terminal Test
+
+![Terminal image test](screenshots/07_terminal_image.png)
+
+### Final Project View
+
+![mediassist-robo project](screenshots/08_mediassist_project.png)
 
 ## 14. Safety Boundary
 
